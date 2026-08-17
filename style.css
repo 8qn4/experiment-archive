@@ -173,3 +173,29 @@ button:active {
         opacity: 0.85;
     }
 }
+#hack-grid {
+    margin-top: 10px;
+    font-size: 0.9em;
+}
+.hack-row {
+    white-space: pre;
+    margin: 2px 0;
+}
+.hack-addr {
+    color: #4a9a4a;
+    opacity: 0.7;
+}
+.hack-word {
+    cursor: pointer;
+    color: #72ff72;
+    text-shadow: 0 0 4px #72ff72, 0 0 10px rgba(80, 255, 80, 0.4);
+}
+.hack-word:hover {
+    background: #72ff72;
+    color: #020402;
+    text-shadow: none;
+}
+.hack-feedback {
+    margin: 4px 0;
+    color: #ffcc55;
+}
