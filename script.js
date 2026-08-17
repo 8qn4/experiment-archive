@@ -186,10 +186,9 @@ function startHack() {
 function renderHackScreen() {
     output.innerHTML = "";
 
-    addLine("ROBCO-STYLE ARCHIVAL DECRYPTION");
+    addLine("ARCHIVAL DECRYPTION");
     addLine("----------------------------------------");
     addLine(`ATTEMPTS REMAINING: ${hackState.attemptsLeft}`);
-    addLine("TIP: MATCHING BRACKET PAIRS REMOVE A DUD ENTRY");
     addLine("");
 
     buildHackGrid();
