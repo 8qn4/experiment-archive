@@ -1,6 +1,7 @@
 const output = document.getElementById("output");
 const menu = document.getElementById("menu");
 const cursorLine = document.getElementById("cursor-line");
+const terminal = document.querySelector(".terminal");
 
 const bootText = [
     "NORTHERN RESEARCH AUTHORITY",
@@ -24,6 +25,7 @@ const bootText = [
 ];
 
 let index = 0;
+let locked = false;
 
 function typeLine() {
     if (index >= bootText.length) {
@@ -50,15 +52,34 @@ function typeLine() {
     }, 18);
 }
 
-function command(name) {
-    const response = document.createElement("div");
+function addText(lines) {
+    lines.forEach(text => {
+        const element = document.createElement("div");
+        element.textContent = text;
+        output.appendChild(element);
+    });
 
-    response.textContent = `> ${name}`;
-    output.appendChild(response);
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+function command(name) {
+    if (locked) {
+        return;
+    }
+
+    locked = true;
+
+    addText([
+        "",
+        "> " + name,
+        ""
+    ]);
+
+    menu.classList.add("hidden");
+    cursorLine.classList.add("hidden");
 
     if (name === "STATUS") {
         addText([
-            "",
             "SYSTEM STATUS",
             "----------------------------------------",
             "CORE ................. ONLINE",
@@ -66,12 +87,12 @@ function command(name) {
             "EXTERNAL LINK ........ UNKNOWN",
             "SECURITY ............. ACTIVE",
             "",
+            "RETURNING TO MAIN MENU..."
         ]);
     }
 
-    if (name === "ARCHIVE") {
+    else if (name === "ARCHIVE") {
         addText([
-            "",
             "ARCHIVE DIRECTORY",
             "----------------------------------------",
             "EXP-001",
@@ -79,14 +100,15 @@ function command(name) {
             "EXP-003",
             "EXP-004",
             "EXP-017",
+            "",
             "[ACCESS RESTRICTED]",
             "",
+            "RETURNING TO MAIN MENU..."
         ]);
     }
 
-    if (name === "REPORT") {
+    else if (name === "REPORT") {
         addText([
-            "",
             "REPORT DATABASE",
             "----------------------------------------",
             "NO LOCAL REPORTS AVAILABLE.",
@@ -97,12 +119,12 @@ function command(name) {
             "",
             "REFERENCE: EXP-017",
             "",
+            "RETURNING TO MAIN MENU..."
         ]);
     }
 
-    if (name === "PERSONNEL") {
+    else if (name === "PERSONNEL") {
         addText([
-            "",
             "PERSONNEL DATABASE",
             "----------------------------------------",
             "DIRECTORY UNAVAILABLE.",
@@ -110,18 +132,15 @@ function command(name) {
             "ERROR 403",
             "SECURITY CLEARANCE REQUIRED.",
             "",
+            "RETURNING TO MAIN MENU..."
         ]);
     }
-}
 
-function addText(lines) {
-    lines.forEach(line => {
-        const element = document.createElement("div");
-        element.textContent = line;
-        output.appendChild(element);
-    });
-
-    window.scrollTo(0, document.body.scrollHeight);
+    setTimeout(() => {
+        locked = false;
+        menu.classList.remove("hidden");
+        cursorLine.classList.remove("hidden");
+    }, 1800);
 }
 
 typeLine();
