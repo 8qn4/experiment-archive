@@ -1,8 +1,3 @@
-@font-face {
-    font-family: terminal;
-    src: local("Courier New");
-}
-
 * {
     box-sizing: border-box;
 }
@@ -17,7 +12,7 @@ body {
 }
 
 body {
-    font-family: terminal, monospace;
+    font-family: "Courier New", monospace;
     color: #72ff72;
 }
 
@@ -25,26 +20,29 @@ body {
     position: relative;
     width: 100vw;
     height: 100vh;
-    background:
-        radial-gradient(
-            ellipse at center,
-            #071407 0%,
-            #020702 65%,
-            #000000 100%
-        );
     overflow: hidden;
+    background: radial-gradient(
+        ellipse at center,
+        #071407 0%,
+        #020702 65%,
+        #000000 100%
+    );
 }
 
 .terminal {
     position: absolute;
-    inset: 5%;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
     padding: 35px;
     overflow-y: auto;
+    font-size: clamp(14px, 1.2vw, 22px);
+    line-height: 1.45;
     text-shadow:
         0 0 4px #72ff72,
         0 0 10px rgba(80, 255, 80, 0.4);
-    font-size: clamp(14px, 1.2vw, 22px);
-    line-height: 1.45;
+    z-index: 5;
 }
 
 .terminal::-webkit-scrollbar {
@@ -70,14 +68,19 @@ body {
 
 button {
     display: block;
+    width: fit-content;
     margin: 8px 0;
-    padding: 4px 10px;
+    padding: 5px 10px;
+
     border: none;
     background: transparent;
+
     color: #72ff72;
-    font: inherit;
+    font-family: "Courier New", monospace;
+    font-size: inherit;
+
     cursor: pointer;
-    text-align: left;
+
     text-shadow:
         0 0 4px #72ff72,
         0 0 10px rgba(80, 255, 80, 0.4);
@@ -87,6 +90,10 @@ button:hover {
     background: #72ff72;
     color: #020402;
     text-shadow: none;
+}
+
+button:active {
+    transform: translateX(2px);
 }
 
 .cursor {
@@ -108,8 +115,8 @@ button:hover {
 
     background: repeating-linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0) 0px,
-        rgba(0, 0, 0, 0) 3px,
+        transparent 0px,
+        transparent 3px,
         rgba(0, 0, 0, 0.18) 4px
     );
 }
@@ -119,12 +126,11 @@ button:hover {
     position: absolute;
     inset: 0;
 
-    background:
-        radial-gradient(
-            ellipse at center,
-            transparent 50%,
-            rgba(0, 0, 0, 0.65) 100%
-        );
+    background: radial-gradient(
+        ellipse at center,
+        transparent 50%,
+        rgba(0, 0, 0, 0.65) 100%
+    );
 }
 
 .crt::after {
@@ -132,14 +138,12 @@ button:hover {
     position: absolute;
     inset: 0;
     pointer-events: none;
-
     background: rgba(80, 255, 80, 0.025);
-
     animation: flicker 0.12s infinite;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 @keyframes blink {

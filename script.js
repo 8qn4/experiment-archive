@@ -2,6 +2,10 @@ const output = document.getElementById("output");
 const menu = document.getElementById("menu");
 const cursorLine = document.getElementById("cursor-line");
 const terminal = document.querySelector(".terminal");
+const buttons = document.querySelectorAll("button");
+
+let bootFinished = false;
+let commandRunning = false;
 
 const bootText = [
     "NORTHERN RESEARCH AUTHORITY",
@@ -24,123 +28,109 @@ const bootText = [
     ""
 ];
 
-let index = 0;
-let locked = false;
-
-function typeLine() {
-    if (index >= bootText.length) {
-        menu.classList.remove("hidden");
-        cursorLine.classList.remove("hidden");
-        return;
-    }
-
+function addLine(text) {
     const line = document.createElement("div");
+    line.textContent = text;
     output.appendChild(line);
-
-    const text = bootText[index];
-    let character = 0;
-
-    const interval = setInterval(() => {
-        line.textContent += text[character];
-        character++;
-
-        if (character >= text.length) {
-            clearInterval(interval);
-            index++;
-            setTimeout(typeLine, 60);
-        }
-    }, 18);
 }
 
-function addText(lines) {
-    lines.forEach(text => {
-        const element = document.createElement("div");
-        element.textContent = text;
-        output.appendChild(element);
-    });
-
+function scrollToBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
 
-function command(name) {
-    if (locked) {
+async function boot() {
+    for (const text of bootText) {
+        const line = document.createElement("div");
+        output.appendChild(line);
+
+        for (const character of text) {
+            line.textContent += character;
+            await new Promise(resolve => setTimeout(resolve, 18));
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 60));
+        scrollToBottom();
+    }
+
+    bootFinished = true;
+    menu.classList.remove("hidden");
+    cursorLine.classList.remove("hidden");
+}
+
+function showResponse(command) {
+    if (!bootFinished || commandRunning) {
         return;
     }
 
-    locked = true;
-
-    addText([
-        "",
-        "> " + name,
-        ""
-    ]);
+    commandRunning = true;
 
     menu.classList.add("hidden");
     cursorLine.classList.add("hidden");
 
-    if (name === "STATUS") {
-        addText([
-            "SYSTEM STATUS",
-            "----------------------------------------",
-            "CORE ................. ONLINE",
-            "ARCHIVE .............. DEGRADED",
-            "EXTERNAL LINK ........ UNKNOWN",
-            "SECURITY ............. ACTIVE",
-            "",
-            "RETURNING TO MAIN MENU..."
-        ]);
+    addLine("");
+    addLine("> " + command);
+    addLine("");
+
+    if (command === "STATUS") {
+        addLine("SYSTEM STATUS");
+        addLine("----------------------------------------");
+        addLine("CORE ................. ONLINE");
+        addLine("ARCHIVE .............. DEGRADED");
+        addLine("EXTERNAL LINK ........ UNKNOWN");
+        addLine("SECURITY ............. ACTIVE");
     }
 
-    else if (name === "ARCHIVE") {
-        addText([
-            "ARCHIVE DIRECTORY",
-            "----------------------------------------",
-            "EXP-001",
-            "EXP-002",
-            "EXP-003",
-            "EXP-004",
-            "EXP-017",
-            "",
-            "[ACCESS RESTRICTED]",
-            "",
-            "RETURNING TO MAIN MENU..."
-        ]);
+    if (command === "ARCHIVE") {
+        addLine("ARCHIVE DIRECTORY");
+        addLine("----------------------------------------");
+        addLine("EXP-001");
+        addLine("EXP-002");
+        addLine("EXP-003");
+        addLine("EXP-004");
+        addLine("EXP-017");
+        addLine("");
+        addLine("[ACCESS RESTRICTED]");
     }
 
-    else if (name === "REPORT") {
-        addText([
-            "REPORT DATABASE",
-            "----------------------------------------",
-            "NO LOCAL REPORTS AVAILABLE.",
-            "",
-            "NOTICE:",
-            "REPORTS HAVE BEEN MOVED TO",
-            "THE EXTERNAL ARCHIVAL TERMINAL.",
-            "",
-            "REFERENCE: EXP-017",
-            "",
-            "RETURNING TO MAIN MENU..."
-        ]);
+    if (command === "REPORT") {
+        addLine("REPORT DATABASE");
+        addLine("----------------------------------------");
+        addLine("NO LOCAL REPORTS AVAILABLE.");
+        addLine("");
+        addLine("NOTICE:");
+        addLine("REPORTS HAVE BEEN MOVED TO");
+        addLine("THE EXTERNAL ARCHIVAL TERMINAL.");
+        addLine("");
+        addLine("REFERENCE: EXP-017");
     }
 
-    else if (name === "PERSONNEL") {
-        addText([
-            "PERSONNEL DATABASE",
-            "----------------------------------------",
-            "DIRECTORY UNAVAILABLE.",
-            "",
-            "ERROR 403",
-            "SECURITY CLEARANCE REQUIRED.",
-            "",
-            "RETURNING TO MAIN MENU..."
-        ]);
+    if (command === "PERSONNEL") {
+        addLine("PERSONNEL DATABASE");
+        addLine("----------------------------------------");
+        addLine("DIRECTORY UNAVAILABLE.");
+        addLine("");
+        addLine("ERROR 403");
+        addLine("SECURITY CLEARANCE REQUIRED.");
     }
+
+    addLine("");
+    addLine("RETURNING TO MAIN MENU...");
+
+    scrollToBottom();
 
     setTimeout(() => {
-        locked = false;
+        commandRunning = false;
         menu.classList.remove("hidden");
         cursorLine.classList.remove("hidden");
+        scrollToBottom();
     }, 1800);
 }
 
-typeLine();
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        const command = button.dataset.command;
+        showResponse(command);
+    });
+});
+
+boot();
