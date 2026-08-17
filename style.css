@@ -172,6 +172,40 @@ button:active {
     margin: 4px 0;
     color: #ffcc55;
 }
+.hack-bracket {
+    cursor: pointer;
+    color: #00fff9;
+    text-shadow: 0 0 4px #00fff9, 0 0 10px rgba(0, 255, 249, 0.5);
+}
+.hack-bracket:hover {
+    background: #00fff9;
+    color: #020402;
+    text-shadow: none;
+}
+.hack-bracket-used {
+    color: #326632;
+    cursor: default;
+}
+
+/* --- REPORT KEY INPUT --- */
+.report-input-row {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+}
+.report-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #72ff72;
+    font-family: "Courier New", monospace;
+    font-size: inherit;
+    text-shadow:
+        0 0 4px #72ff72,
+        0 0 10px rgba(80, 255, 80, 0.4);
+    caret-color: #72ff72;
+}
 
 /* --- GLITCHED DECRYPT BUTTON --- */
 /* Looks like a corrupted fragment that isn't part of the normal menu */
