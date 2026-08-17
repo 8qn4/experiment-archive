@@ -6,31 +6,24 @@
     <title>ARCHIVAL TERMINAL</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div class="crt">
     <div class="scanlines"></div>
-
     <main class="terminal">
         <div id="output"></div>
-
         <div id="menu" class="hidden">
             <div class="menu-title">AVAILABLE COMMANDS</div>
-
             <button data-command="STATUS">[ STATUS ]</button>
             <button data-command="ARCHIVE">[ ARCHIVE ]</button>
             <button data-command="REPORT">[ REPORT DATABASE ]</button>
             <button data-command="PERSONNEL">[ PERSONNEL ]</button>
+            <button data-command="DECRYPT" class="glitch-button" data-text="[ DECRYPT ]">[ DECRYPT ]</button>
         </div>
-
         <div id="cursor-line" class="hidden">
             &gt;<span class="cursor"></span>
         </div>
     </main>
 </div>
-
 <script src="script.js"></script>
-
 </body>
 </html>

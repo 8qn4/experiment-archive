@@ -1,7 +1,6 @@
 * {
     box-sizing: border-box;
 }
-
 html,
 body {
     margin: 0;
@@ -10,12 +9,10 @@ body {
     overflow: hidden;
     background: #020402;
 }
-
 body {
     font-family: "Courier New", monospace;
     color: #72ff72;
 }
-
 .crt {
     position: relative;
     width: 100vw;
@@ -28,7 +25,6 @@ body {
         #000000 100%
     );
 }
-
 .terminal {
     position: absolute;
     top: 5%;
@@ -44,58 +40,45 @@ body {
         0 0 10px rgba(80, 255, 80, 0.4);
     z-index: 5;
 }
-
 .terminal::-webkit-scrollbar {
     width: 8px;
 }
-
 .terminal::-webkit-scrollbar-track {
     background: #020402;
 }
-
 .terminal::-webkit-scrollbar-thumb {
     background: #326632;
 }
-
 #output {
     white-space: pre-wrap;
 }
-
 .menu-title {
     margin-top: 25px;
     margin-bottom: 15px;
 }
-
 button {
     display: block;
     width: fit-content;
     margin: 8px 0;
     padding: 5px 10px;
-
     border: none;
     background: transparent;
-
     color: #72ff72;
     font-family: "Courier New", monospace;
     font-size: inherit;
-
     cursor: pointer;
-
     text-shadow:
         0 0 4px #72ff72,
         0 0 10px rgba(80, 255, 80, 0.4);
 }
-
 button:hover {
     background: #72ff72;
     color: #020402;
     text-shadow: none;
 }
-
 button:active {
     transform: translateX(2px);
 }
-
 .cursor {
     display: inline-block;
     width: 11px;
@@ -106,13 +89,11 @@ button:active {
     box-shadow: 0 0 8px #72ff72;
     animation: blink 0.8s infinite;
 }
-
 .scanlines {
     position: absolute;
     inset: 0;
     z-index: 20;
     pointer-events: none;
-
     background: repeating-linear-gradient(
         to bottom,
         transparent 0px,
@@ -120,19 +101,16 @@ button:active {
         rgba(0, 0, 0, 0.18) 4px
     );
 }
-
 .scanlines::after {
     content: "";
     position: absolute;
     inset: 0;
-
     background: radial-gradient(
         ellipse at center,
         transparent 50%,
         rgba(0, 0, 0, 0.65) 100%
     );
 }
-
 .crt::after {
     content: "";
     position: absolute;
@@ -141,38 +119,33 @@ button:active {
     background: rgba(80, 255, 80, 0.025);
     animation: flicker 0.12s infinite;
 }
-
 .hidden {
     display: none !important;
 }
-
 @keyframes blink {
     50% {
         opacity: 0;
     }
 }
-
 @keyframes flicker {
     0% {
         opacity: 0.8;
     }
-
     25% {
         opacity: 1;
     }
-
     50% {
         opacity: 0.9;
     }
-
     75% {
         opacity: 1;
     }
-
     100% {
         opacity: 0.85;
     }
 }
+
+/* --- HACKING MINIGAME --- */
 #hack-grid {
     margin-top: 10px;
     font-size: 0.9em;
@@ -198,4 +171,67 @@ button:active {
 .hack-feedback {
     margin: 4px 0;
     color: #ffcc55;
+}
+
+/* --- GLITCHED DECRYPT BUTTON --- */
+/* Looks like a corrupted fragment that isn't part of the normal menu */
+.glitch-button {
+    position: relative;
+    margin-top: 22px;
+    margin-left: 14px;
+    transform: rotate(-1deg);
+    color: #ff3b3b;
+    opacity: 0.55;
+    letter-spacing: 1px;
+    text-shadow:
+        0 0 4px #ff3b3b,
+        0 0 10px rgba(255, 59, 59, 0.5);
+    animation: glitch-flicker 3.5s infinite steps(1, end);
+}
+.glitch-button:hover {
+    background: transparent;
+    color: #ff3b3b;
+    opacity: 1;
+    animation: glitch-shake 0.15s infinite;
+}
+.glitch-button::before,
+.glitch-button::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    background: transparent;
+}
+.glitch-button::before {
+    color: #00fff9;
+    opacity: 0.6;
+    clip-path: inset(0 0 55% 0);
+    transform: translate(-2px, -1px);
+}
+.glitch-button::after {
+    color: #ff00c8;
+    opacity: 0.6;
+    clip-path: inset(55% 0 0 0);
+    transform: translate(2px, 1px);
+}
+@keyframes glitch-flicker {
+    0%   { opacity: 0.55; }
+    2%   { opacity: 0.1; }
+    4%   { opacity: 0.6; }
+    19%  { opacity: 0.55; }
+    21%  { opacity: 0.05; }
+    23%  { opacity: 0.55; }
+    80%  { opacity: 0.5; }
+    82%  { opacity: 0.15; }
+    84%  { opacity: 0.55; }
+    100% { opacity: 0.55; }
+}
+@keyframes glitch-shake {
+    0%   { transform: rotate(-1deg) translate(0, 0); }
+    25%  { transform: rotate(-1deg) translate(-1px, 1px); }
+    50%  { transform: rotate(-1deg) translate(1px, -1px); }
+    75%  { transform: rotate(-1deg) translate(-1px, 0); }
+    100% { transform: rotate(-1deg) translate(0, 0); }
 }
