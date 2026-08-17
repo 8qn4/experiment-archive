@@ -34,6 +34,15 @@ function addLine(text) {
     output.appendChild(line);
 }
 
+async function typeLine(text, speed = 18) {
+    const line = document.createElement("div");
+    output.appendChild(line);
+    for (const character of text) {
+        line.textContent += character;
+        await new Promise(resolve => setTimeout(resolve, speed));
+    }
+    scrollToBottom();
+}
 function scrollToBottom() {
     terminal.scrollTop = terminal.scrollHeight;
 }
@@ -57,66 +66,58 @@ async function boot() {
     cursorLine.classList.remove("hidden");
 }
 
-function showResponse(command) {
+async function showResponse(command) {
     if (!bootFinished || commandRunning) {
         return;
     }
-
     commandRunning = true;
-
     menu.classList.add("hidden");
     cursorLine.classList.add("hidden");
-
-    addLine("");
-    addLine("> " + command);
-    addLine("");
+    await typeLine("");
+    await typeLine("> " + command);
+    await typeLine("");
 
     if (command === "STATUS") {
-        addLine("SYSTEM STATUS");
-        addLine("----------------------------------------");
-        addLine("CORE ................. ONLINE");
-        addLine("ARCHIVE .............. DEGRADED");
-        addLine("EXTERNAL LINK ........ UNKNOWN");
-        addLine("SECURITY ............. ACTIVE");
+        await typeLine("SYSTEM STATUS");
+        await typeLine("----------------------------------------");
+        await typeLine("CORE ................. ONLINE");
+        await typeLine("ARCHIVE .............. DEGRADED");
+        await typeLine("EXTERNAL LINK ........ UNKNOWN");
+        await typeLine("SECURITY ............. ACTIVE");
     }
-
     if (command === "ARCHIVE") {
-        addLine("ARCHIVE DIRECTORY");
-        addLine("----------------------------------------");
-        addLine("EXP-001");
-        addLine("EXP-002");
-        addLine("EXP-003");
-        addLine("EXP-004");
-        addLine("EXP-017");
-        addLine("");
-        addLine("[ACCESS RESTRICTED]");
+        await typeLine("ARCHIVE DIRECTORY");
+        await typeLine("----------------------------------------");
+        await typeLine("EXP-001");
+        await typeLine("EXP-002");
+        await typeLine("EXP-003");
+        await typeLine("EXP-004");
+        await typeLine("EXP-017");
+        await typeLine("");
+        await typeLine("[ACCESS RESTRICTED]");
     }
-
     if (command === "REPORT") {
-        addLine("REPORT DATABASE");
-        addLine("----------------------------------------");
-        addLine("NO LOCAL REPORTS AVAILABLE.");
-        addLine("");
-        addLine("NOTICE:");
-        addLine("REPORTS HAVE BEEN MOVED TO");
-        addLine("THE EXTERNAL ARCHIVAL TERMINAL.");
-        addLine("");
-        addLine("REFERENCE: EXP-017");
+        await typeLine("REPORT DATABASE");
+        await typeLine("----------------------------------------");
+        await typeLine("NO LOCAL REPORTS AVAILABLE.");
+        await typeLine("");
+        await typeLine("NOTICE:");
+        await typeLine("REPORTS HAVE BEEN MOVED TO");
+        await typeLine("THE EXTERNAL ARCHIVAL TERMINAL.");
+        await typeLine("");
+        await typeLine("REFERENCE: EXP-017");
     }
-
     if (command === "PERSONNEL") {
-        addLine("PERSONNEL DATABASE");
-        addLine("----------------------------------------");
-        addLine("DIRECTORY UNAVAILABLE.");
-        addLine("");
-        addLine("ERROR 403");
-        addLine("SECURITY CLEARANCE REQUIRED.");
+        await typeLine("PERSONNEL DATABASE");
+        await typeLine("----------------------------------------");
+        await typeLine("DIRECTORY UNAVAILABLE.");
+        await typeLine("");
+        await typeLine("ERROR 403");
+        await typeLine("SECURITY CLEARANCE REQUIRED.");
     }
 
-    addLine("");
-    addLine("RETURNING TO MAIN MENU...");
-
-    scrollToBottom();
+    await typeLine("");
+    await typeLine("RETURNING TO MAIN MENU...");
 
     setTimeout(() => {
         commandRunning = false;
