@@ -1,0 +1,171 @@
+@font-face {
+    font-family: terminal;
+    src: local("Courier New");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #020402;
+}
+
+body {
+    font-family: terminal, monospace;
+    color: #72ff72;
+}
+
+.crt {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background:
+        radial-gradient(
+            ellipse at center,
+            #071407 0%,
+            #020702 65%,
+            #000000 100%
+        );
+    overflow: hidden;
+}
+
+.terminal {
+    position: absolute;
+    inset: 5%;
+    padding: 35px;
+    overflow-y: auto;
+    text-shadow:
+        0 0 4px #72ff72,
+        0 0 10px rgba(80, 255, 80, 0.4);
+    font-size: clamp(14px, 1.2vw, 22px);
+    line-height: 1.45;
+}
+
+.terminal::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal::-webkit-scrollbar-track {
+    background: #020402;
+}
+
+.terminal::-webkit-scrollbar-thumb {
+    background: #326632;
+}
+
+#output {
+    white-space: pre-wrap;
+}
+
+.menu-title {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+button {
+    display: block;
+    margin: 8px 0;
+    padding: 4px 10px;
+    border: none;
+    background: transparent;
+    color: #72ff72;
+    font: inherit;
+    cursor: pointer;
+    text-align: left;
+    text-shadow:
+        0 0 4px #72ff72,
+        0 0 10px rgba(80, 255, 80, 0.4);
+}
+
+button:hover {
+    background: #72ff72;
+    color: #020402;
+    text-shadow: none;
+}
+
+.cursor {
+    display: inline-block;
+    width: 11px;
+    height: 1.1em;
+    margin-left: 4px;
+    vertical-align: middle;
+    background: #72ff72;
+    box-shadow: 0 0 8px #72ff72;
+    animation: blink 0.8s infinite;
+}
+
+.scanlines {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0px,
+        rgba(0, 0, 0, 0) 3px,
+        rgba(0, 0, 0, 0.18) 4px
+    );
+}
+
+.scanlines::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 50%,
+            rgba(0, 0, 0, 0.65) 100%
+        );
+}
+
+.crt::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background: rgba(80, 255, 80, 0.025);
+
+    animation: flicker 0.12s infinite;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes flicker {
+    0% {
+        opacity: 0.8;
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.85;
+    }
+}
