@@ -3,24 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCHIVAL TERMINAL</title>
+    <title>terminal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="crt">
     <div class="scanlines"></div>
-    <main class="terminal">
+    <main class="terminal" id="terminal">
         <div id="output"></div>
-        <div id="menu" class="hidden">
-            <div class="menu-title">AVAILABLE COMMANDS</div>
-            <button data-command="STATUS">[ STATUS ]</button>
-            <button data-command="ARCHIVE">[ ARCHIVE ]</button>
-            <button data-command="REPORT">[ REPORT DATABASE ]</button>
-            <button data-command="PERSONNEL">[ PERSONNEL ]</button>
-            <button data-command="DECRYPT" class="glitch-button" data-text="[ DECRYPT ]">[ DECRYPT ]</button>
-        </div>
-        <div id="cursor-line" class="hidden">
-            &gt;<span class="cursor"></span>
+        <div id="prompt-row" class="hidden">
+            <span class="prompt-arrow">&gt;</span>
+            <input id="cmd-input" type="text" autocomplete="off" spellcheck="false" autocapitalize="off" />
         </div>
     </main>
 </div>

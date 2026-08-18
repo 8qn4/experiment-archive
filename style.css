@@ -34,7 +34,7 @@ body {
     padding: 35px;
     overflow-y: auto;
     font-size: clamp(14px, 1.2vw, 22px);
-    line-height: 1.45;
+    line-height: 1.5;
     text-shadow:
         0 0 4px #72ff72,
         0 0 10px rgba(80, 255, 80, 0.4);
@@ -52,43 +52,39 @@ body {
 #output {
     white-space: pre-wrap;
 }
-.menu-title {
-    margin-top: 25px;
-    margin-bottom: 15px;
+#output div {
+    min-height: 1.5em;
 }
-button {
-    display: block;
-    width: fit-content;
-    margin: 8px 0;
-    padding: 5px 10px;
-    border: none;
+.dim {
+    opacity: 0.55;
+}
+
+/* --- PROMPT --- */
+#prompt-row {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+}
+.prompt-arrow {
+    margin-right: 6px;
+}
+#cmd-input {
+    flex: 1;
     background: transparent;
+    border: none;
+    outline: none;
     color: #72ff72;
     font-family: "Courier New", monospace;
     font-size: inherit;
-    cursor: pointer;
     text-shadow:
         0 0 4px #72ff72,
         0 0 10px rgba(80, 255, 80, 0.4);
+    caret-color: #72ff72;
 }
-button:hover {
-    background: #72ff72;
-    color: #020402;
-    text-shadow: none;
+#cmd-input:disabled {
+    opacity: 0.3;
 }
-button:active {
-    transform: translateX(2px);
-}
-.cursor {
-    display: inline-block;
-    width: 11px;
-    height: 1.1em;
-    margin-left: 4px;
-    vertical-align: middle;
-    background: #72ff72;
-    box-shadow: 0 0 8px #72ff72;
-    animation: blink 0.8s infinite;
-}
+
 .scanlines {
     position: absolute;
     inset: 0;
@@ -122,11 +118,6 @@ button:active {
 .hidden {
     display: none !important;
 }
-@keyframes blink {
-    50% {
-        opacity: 0;
-    }
-}
 @keyframes flicker {
     0% {
         opacity: 0.8;
@@ -143,129 +134,4 @@ button:active {
     100% {
         opacity: 0.85;
     }
-}
-
-/* --- HACKING MINIGAME --- */
-#hack-grid {
-    margin-top: 10px;
-    font-size: 0.9em;
-}
-.hack-row {
-    white-space: pre;
-    margin: 2px 0;
-}
-.hack-addr {
-    color: #4a9a4a;
-    opacity: 0.7;
-}
-.hack-word {
-    cursor: pointer;
-    color: #72ff72;
-    text-shadow: 0 0 4px #72ff72, 0 0 10px rgba(80, 255, 80, 0.4);
-}
-.hack-word:hover {
-    background: #72ff72;
-    color: #020402;
-    text-shadow: none;
-}
-.hack-feedback {
-    margin: 4px 0;
-    color: #ffcc55;
-}
-.hack-bracket {
-    cursor: pointer;
-    color: #00fff9;
-    text-shadow: 0 0 4px #00fff9, 0 0 10px rgba(0, 255, 249, 0.5);
-}
-.hack-bracket:hover {
-    background: #00fff9;
-    color: #020402;
-    text-shadow: none;
-}
-.hack-bracket-used {
-    color: #326632;
-    cursor: default;
-}
-
-/* --- REPORT KEY INPUT --- */
-.report-input-row {
-    display: flex;
-    align-items: center;
-    margin-top: 4px;
-}
-.report-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #72ff72;
-    font-family: "Courier New", monospace;
-    font-size: inherit;
-    text-shadow:
-        0 0 4px #72ff72,
-        0 0 10px rgba(80, 255, 80, 0.4);
-    caret-color: #72ff72;
-}
-
-/* --- GLITCHED DECRYPT BUTTON --- */
-/* Looks like a corrupted fragment that isn't part of the normal menu */
-.glitch-button {
-    position: relative;
-    margin-top: 22px;
-    margin-left: 14px;
-    transform: rotate(-1deg);
-    color: #ff3b3b;
-    opacity: 0.55;
-    letter-spacing: 1px;
-    text-shadow:
-        0 0 4px #ff3b3b,
-        0 0 10px rgba(255, 59, 59, 0.5);
-    animation: glitch-flicker 3.5s infinite steps(1, end);
-}
-.glitch-button:hover {
-    background: transparent;
-    color: #ff3b3b;
-    opacity: 1;
-    animation: glitch-shake 0.15s infinite;
-}
-.glitch-button::before,
-.glitch-button::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    overflow: hidden;
-    background: transparent;
-}
-.glitch-button::before {
-    color: #00fff9;
-    opacity: 0.6;
-    clip-path: inset(0 0 55% 0);
-    transform: translate(-2px, -1px);
-}
-.glitch-button::after {
-    color: #ff00c8;
-    opacity: 0.6;
-    clip-path: inset(55% 0 0 0);
-    transform: translate(2px, 1px);
-}
-@keyframes glitch-flicker {
-    0%   { opacity: 0.55; }
-    2%   { opacity: 0.1; }
-    4%   { opacity: 0.6; }
-    19%  { opacity: 0.55; }
-    21%  { opacity: 0.05; }
-    23%  { opacity: 0.55; }
-    80%  { opacity: 0.5; }
-    82%  { opacity: 0.15; }
-    84%  { opacity: 0.55; }
-    100% { opacity: 0.55; }
-}
-@keyframes glitch-shake {
-    0%   { transform: rotate(-1deg) translate(0, 0); }
-    25%  { transform: rotate(-1deg) translate(-1px, 1px); }
-    50%  { transform: rotate(-1deg) translate(1px, -1px); }
-    75%  { transform: rotate(-1deg) translate(-1px, 0); }
-    100% { transform: rotate(-1deg) translate(0, 0); }
 }
