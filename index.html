@@ -2,21 +2,174 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>terminal</title>
+    <title></title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="crt">
-    <div class="scanlines"></div>
-    <main class="terminal" id="terminal">
-        <div id="output"></div>
-        <div id="prompt-row" class="hidden">
-            <span class="prompt-arrow">&gt;</span>
-            <input id="cmd-input" type="text" autocomplete="off" spellcheck="false" autocapitalize="off" />
-        </div>
-    </main>
+
+<div id="room">
+    <div id="nothing"></div>
+    <div id="message"></div>
 </div>
-<script src="script.js"></script>
+
+<script>
+const message = document.getElementById("message");
+const nothing = document.getElementById("nothing");
+
+let clicks = 0;
+let lastKey = 0;
+let sequence = [];
+let unlocked = false;
+
+const fragments = [
+    ".",
+    "..",
+    "...",
+    "....",
+    ".....",
+    "......",
+    ".......",
+    "........",
+    "........."
+];
+
+function whisper(text) {
+    message.textContent = text;
+
+    setTimeout(() => {
+        if (!unlocked) {
+            message.textContent = "";
+        }
+    }, 1800);
+}
+
+document.addEventListener("click", () => {
+    clicks++;
+
+    if (clicks === 3) whisper(".");
+    if (clicks === 7) whisper("..");
+    if (clicks === 12) whisper("...");
+    if (clicks === 18) whisper("....");
+    if (clicks === 25) whisper(".....");
+    if (clicks === 33) whisper("......");
+    if (clicks === 42) whisper(".......");
+    if (clicks === 52) whisper("........");
+    if (clicks === 63) whisper(".........");
+});
+
+document.addEventListener("keydown", e => {
+    const now = Date.now();
+    const difference = now - lastKey;
+    lastKey = now;
+
+    sequence.push({
+        key: e.key,
+        time: difference
+    });
+
+    if (sequence.length > 16) {
+        sequence.shift();
+    }
+
+    if (sequence.length >= 8) {
+        const recent = sequence.slice(-8);
+
+        const pattern = recent.map(x => {
+            return x.time < 300 ? "·" : "-";
+        }).join("");
+
+        if (pattern === "·-··-·--") whisper("...");
+        if (pattern === "--·-·---") whisper("..");
+        if (pattern === "·---··-·") whisper("....");
+    }
+
+    const keys = sequence.map(x => x.key.toLowerCase()).join("");
+
+    if (keys.includes("inspect")) {
+        document.body.setAttribute(
+            "data-observation",
+            "THE ORDER IS WRONG"
+        );
+
+        whisper("look again");
+    }
+
+    if (keys.includes("mirror")) {
+        document.body.setAttribute(
+            "data-reflection",
+            "READ BACKWARDS"
+        );
+
+        whisper("...");
+    }
+
+    if (keys.includes("silence")) {
+        document.body.setAttribute(
+            "data-silence",
+            "COUNT THE GAPS"
+        );
+
+        whisper("......");
+    }
+});
+
+const archive = [
+    "N","O","T","H","I","N","G","_",
+    "I","S","_","W","H","A","T","_",
+    "I","T","_","S","E","E","M","S"
+];
+
+const order = [
+    23,1,18,7,21,4,12,2,
+    19,9,24,6,15,3,20,11,
+    5,17,8,22,14,10,16,13
+];
+
+function recover() {
+    let result = "";
+
+    for (let i = 0; i < order.length; i++) {
+        result += archive[order[i] - 1];
+    }
+
+    return result;
+}
+
+window.recover = recover;
+
+function finalLayer(input) {
+    let value = 0;
+
+    for (let i = 0; i < input.length; i++) {
+        value ^= input.charCodeAt(i);
+        value = ((value << 5) - value) >>> 0;
+    }
+
+    return value.toString(36).toUpperCase();
+}
+
+window.finalLayer = finalLayer;
+
+setInterval(() => {
+    if (Math.random() < 0.015) {
+        nothing.textContent =
+            fragments[Math.floor(Math.random() * fragments.length)];
+
+        setTimeout(() => {
+            nothing.textContent = "";
+        }, 120);
+    }
+}, 100);
+
+setInterval(() => {
+    if (Math.random() < 0.03) {
+        document.title = " ";
+    } else {
+        document.title = "";
+    }
+}, 700);
+</script>
+
 </body>
 </html>
