@@ -9,10 +9,9 @@ let solved = false;
 
 const bootText = [
     "this terminal was left running.",
-    "",
+    "is this even real?",
     "there's no menu. type what you want to do.",
-    "type HELP if you're stuck.",
-    ""
+    "(I'd suggest typing "HELP")"
 ];
 
 // --- helpers ---
@@ -59,25 +58,30 @@ const SECTIONS = {
         "status",
         "clear",
         "",
-        "that's what's here. the rest, you'll have to find yourself."
+        "ALL THAT REMAINS."
     ],
     log: [
-        "no title. dated only by entry count.",
+        "DATED ONLY BY ENTRY COUNT.",
         "",
         "ENTRY 14 -",
         "he stopped signing them near the end. i think he knew",
         "someone else would end up reading this.",
         "",
         "ENTRY 22 -",
-        "everything he locked, he keyed to his own badge ",
-        "not the day. the first pair of numbers only.",
+        "he never trusted a single number. everything on that file",
+        "went in - every pair, top to bottom, counted out as letters.",
+        "a is one. you know the rest.",
         "",
         "ENTRY 31 -",
+        "it isn't a shift. it doesn't sit still long enough for that.",
+        "six letters, then it starts over. that's all i'll say.",
+        "",
+        "ENTRY 40 -",
         "if you find the archive fragment, don't read it aloud.",
         "he was specific about that. never said why."
     ],
     personnel: [
-        "one file left un-purged. most of it didn't survive.",
+        "one file left.",
         "",
         "NAME ..................... [REDACTED]",
         "ROLE ..................... [REDACTED]",
@@ -88,16 +92,16 @@ const SECTIONS = {
         "everything else: gone."
     ],
     archive: [
-        "EXP-017 - fragment recovered. encoded. uncorrected.",
+        "EXP-017 - fragment recovered.",
         "",
-        "BQN BCXYYNM UXPPRWP JOCNA FNNT CQANN",
-        "FQJC RB UNOC RB ORUNM DWMNA XENAFJCLQ",
-        "MX WXC BYNJT CQRB WJVN",
+        "UCM IDSRKMT VSIBQDQ EHOMH GIGF BXBIG",
+        "YCIJ SW NZNJ SW HDTUN YPYMH YZGMEQDGJ",
+        "FJ VED WRZIA DLKN VQWI",
         "",
         "that's all of it. make of it what you will."
     ],
     status: [
-        "core .......... running, barely.",
+        "core .......... ACTIVE?",
         "everything else .......... quiet."
     ]
 };
@@ -105,15 +109,13 @@ const SECTIONS = {
 const DEAD_END_LINES = [
     "nothing.",
     "static.",
-    "?",
-    "the terminal doesn't answer that.",
     "...",
     "quiet."
 ];
 
 // SHA-256 of the correct passphrase, uppercased. Kept hashed so it
 // isn't sitting in the page source as plain text.
-const TARGET_HASH = "e1ca2870940ef1e379931dca73c84b916c7db5c20a55d5694f68e18d95de7fc";
+const TARGET_HASH = "e1ca2870940ef1e379931dca73c84b916c7db5c20a55d5694f68e18d95de7fcd";
 const FINAL_CODE = "NRA-ACCESS-9931";
 
 async function sha256Hex(text) {
