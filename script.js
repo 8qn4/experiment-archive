@@ -64,17 +64,17 @@ const SECTIONS = {
     log: [
         "no title. dated only by entry count.",
         "",
-        "ENTRY 14 —",
-        "she stopped signing them near the end. i think she knew",
+        "ENTRY 14 -",
+        "he stopped signing them near the end. i think he knew",
         "someone else would end up reading this.",
         "",
-        "ENTRY 22 —",
-        "everything she locked, she keyed to her own badge —",
+        "ENTRY 22 -",
+        "everything he locked, he keyed to his own badge ",
         "not the day. the first pair of numbers only.",
         "",
-        "ENTRY 31 —",
+        "ENTRY 31 -",
         "if you find the archive fragment, don't read it aloud.",
-        "she was specific about that. never said why."
+        "he was specific about that. never said why."
     ],
     personnel: [
         "one file left un-purged. most of it didn't survive.",
@@ -88,7 +88,7 @@ const SECTIONS = {
         "everything else: gone."
     ],
     archive: [
-        "EXP-017 — fragment recovered. encoded. uncorrected.",
+        "EXP-017 - fragment recovered. encoded. uncorrected.",
         "",
         "BQN BCXYYNM UXPPRWP JOCNA FNNT CQANN",
         "FQJC RB UNOC RB ORUNM DWMNA XENAFJCLQ",
@@ -105,7 +105,7 @@ const SECTIONS = {
 const DEAD_END_LINES = [
     "nothing.",
     "static.",
-    "that means nothing here.",
+    "?",
     "the terminal doesn't answer that.",
     "...",
     "quiet."
