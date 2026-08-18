@@ -47,15 +47,25 @@ function whisper(text) {
 document.addEventListener("click", () => {
     clicks++;
 
-    if (clicks === 3) whisper(".");
-    if (clicks === 7) whisper("..");
-    if (clicks === 12) whisper("...");
-    if (clicks === 18) whisper("....");
-    if (clicks === 25) whisper(".....");
-    if (clicks === 33) whisper("......");
-    if (clicks === 42) whisper(".......");
-    if (clicks === 52) whisper("........");
-    if (clicks === 63) whisper(".........");
+    const clues = {
+        3: ".",
+        7: "..",
+        12: "...",
+        18: "....",
+        25: ".....",
+        33: "......",
+        42: ".......",
+        52: "........",
+        63: "........."
+    };
+
+    if (clues[clicks]) {
+        whisper(clues[clicks]);
+    }
+
+    if (clicks >= 63) {
+        clicks = 0;
+    }
 });
 
 document.addEventListener("keydown", e => {
