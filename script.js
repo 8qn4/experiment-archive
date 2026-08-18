@@ -11,7 +11,7 @@ const bootText = [
     "this terminal was left running.",
     "is this even real?",
     "there's no menu. type what you want to do.",
-    "(I'd suggest typing 'HELP')"
+    "(I'd suggest typing HELP)"
 ];
 
 // --- helpers ---
