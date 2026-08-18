@@ -2,183 +2,296 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div id="room">
-    <div id="nothing"></div>
+<div id="puzzle">
+    <div id="word">nothing</div>
+    <div id="inputArea">
+        <input id="answer" type="text" autocomplete="off" spellcheck="false">
+    </div>
     <div id="message"></div>
 </div>
 
 <script>
-const message = document.getElementById("message");
-const nothing = document.getElementById("nothing");
+(() => {
+    "use strict";
 
-let clicks = 0;
-let lastKey = 0;
-let sequence = [];
-let unlocked = false;
+    const word = document.getElementById("word");
+    const input = document.getElementById("answer");
+    const message = document.getElementById("message");
 
-const fragments = [
-    ".",
-    "..",
-    "...",
-    "....",
-    ".....",
-    "......",
-    ".......",
-    "........",
-    "........."
-];
-
-function whisper(text) {
-    message.textContent = text;
-
-    setTimeout(() => {
-        if (!unlocked) {
-            message.textContent = "";
-        }
-    }, 1800);
-}
-
-document.addEventListener("click", () => {
-    clicks++;
-
-    const clues = {
-        3: ".",
-        7: "..",
-        12: "...",
-        18: "....",
-        25: ".....",
-        33: "......",
-        42: ".......",
-        52: "........",
-        63: "........."
+    const states = {
+        WATCHING: 0,
+        SOURCE: 1,
+        MIRROR: 2,
+        COMPLETE: 3
     };
 
-    if (clues[clicks]) {
-        whisper(clues[clicks]);
+    let state = states.WATCHING;
+    let timer = null;
+    let revealTimer = null;
+    let index = 0;
+
+    const changes = [
+        { position: 1, value: "n" },
+        { position: 2, value: "o" },
+        { position: 3, value: "t" },
+        { position: 4, value: "h" },
+        { position: 5, value: "i" },
+        { position: 6, value: "n" }
+    ];
+
+    const sourceFragments = [
+        "R",
+        "I",
+        "M",
+        "R",
+        "O"
+    ];
+
+    const sourceOrder = [
+        3,
+        1,
+        5,
+        2,
+        4
+    ];
+
+    const finalCipher = [
+        19,
+        7,
+        24,
+        11,
+        3,
+        15,
+        20,
+        8
+    ];
+
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    function setMessage(text, duration = 0) {
+        message.textContent = text;
+
+        if (revealTimer) {
+            clearTimeout(revealTimer);
+            revealTimer = null;
+        }
+
+        if (duration > 0) {
+            revealTimer = setTimeout(() => {
+                if (state !== states.COMPLETE) {
+                    message.textContent = "";
+                }
+            }, duration);
+        }
     }
 
-    if (clicks >= 63) {
-        clicks = 0;
-    }
-});
-
-document.addEventListener("keydown", e => {
-    const now = Date.now();
-    const difference = now - lastKey;
-    lastKey = now;
-
-    sequence.push({
-        key: e.key,
-        time: difference
-    });
-
-    if (sequence.length > 16) {
-        sequence.shift();
+    function showWord() {
+        word.textContent = "nothing";
     }
 
-    if (sequence.length >= 8) {
-        const recent = sequence.slice(-8);
+    function flashCharacter(position, character) {
+        const base = "nothing";
 
-        const pattern = recent.map(x => {
-            return x.time < 300 ? "·" : "-";
-        }).join("");
+        if (
+            !Number.isInteger(position) ||
+            position < 1 ||
+            position > base.length
+        ) {
+            return;
+        }
 
-        if (pattern === "·-··-·--") whisper("...");
-        if (pattern === "--·-·---") whisper("..");
-        if (pattern === "·---··-·") whisper("....");
-    }
+        const chars = base.split("");
+        chars[position - 1] = character;
 
-    const keys = sequence.map(x => x.key.toLowerCase()).join("");
-
-    if (keys.includes("inspect")) {
-        document.body.setAttribute(
-            "data-observation",
-            "THE ORDER IS WRONG"
-        );
-
-        whisper("look again");
-    }
-
-    if (keys.includes("mirror")) {
-        document.body.setAttribute(
-            "data-reflection",
-            "READ BACKWARDS"
-        );
-
-        whisper("...");
-    }
-
-    if (keys.includes("silence")) {
-        document.body.setAttribute(
-            "data-silence",
-            "COUNT THE GAPS"
-        );
-
-        whisper("......");
-    }
-});
-
-const archive = [
-    "N","O","T","H","I","N","G","_",
-    "I","S","_","W","H","A","T","_",
-    "I","T","_","S","E","E","M","S"
-];
-
-const order = [
-    23,1,18,7,21,4,12,2,
-    19,9,24,6,15,3,20,11,
-    5,17,8,22,14,10,16,13
-];
-
-function recover() {
-    let result = "";
-
-    for (let i = 0; i < order.length; i++) {
-        result += archive[order[i] - 1];
-    }
-
-    return result;
-}
-
-window.recover = recover;
-
-function finalLayer(input) {
-    let value = 0;
-
-    for (let i = 0; i < input.length; i++) {
-        value ^= input.charCodeAt(i);
-        value = ((value << 5) - value) >>> 0;
-    }
-
-    return value.toString(36).toUpperCase();
-}
-
-window.finalLayer = finalLayer;
-
-setInterval(() => {
-    if (Math.random() < 0.015) {
-        nothing.textContent =
-            fragments[Math.floor(Math.random() * fragments.length)];
+        word.textContent = chars.join("");
 
         setTimeout(() => {
-            nothing.textContent = "";
-        }, 120);
+            if (state === states.WATCHING) {
+                showWord();
+            }
+        }, 450);
     }
-}, 100);
 
-setInterval(() => {
-    if (Math.random() < 0.03) {
-        document.title = " ";
-    } else {
-        document.title = "";
+    function runObservation() {
+        if (state !== states.WATCHING) {
+            return;
+        }
+
+        const current = changes[index];
+
+        if (!current) {
+            index = 0;
+            return;
+        }
+
+        flashCharacter(current.position, current.value);
+
+        index++;
+
+        if (index >= changes.length) {
+            index = 0;
+        }
     }
-}, 700);
+
+    function startObservation() {
+        if (timer) {
+            clearInterval(timer);
+        }
+
+        runObservation();
+
+        timer = setInterval(() => {
+            runObservation();
+        }, 3500);
+    }
+
+    function stopObservation() {
+        if (timer) {
+            clearInterval(timer);
+            timer = null;
+        }
+    }
+
+    function buildMirror() {
+        let result = "";
+
+        for (const position of sourceOrder) {
+            const character = sourceFragments[position - 1];
+
+            if (typeof character !== "string") {
+                return "";
+            }
+
+            result += character;
+        }
+
+        return result;
+    }
+
+    function caesarDecode(numbers, shift) {
+        return numbers.map(number => {
+            const index = ((number - 1 - shift) % 26 + 26) % 26;
+            return alphabet[index];
+        }).join("");
+    }
+
+    function handleInput() {
+        const value = input.value.trim().toUpperCase();
+
+        input.value = "";
+
+        if (!value) {
+            return;
+        }
+
+        if (state === states.WATCHING) {
+            setMessage("Nothing happens.", 1200);
+            return;
+        }
+
+        if (state === states.SOURCE) {
+            if (value === buildMirror()) {
+                state = states.MIRROR;
+
+                setMessage(
+                    "The reflection is not the answer.\nLook at the numbers.",
+                    5000
+                );
+
+                input.placeholder = "enter the answer";
+                return;
+            }
+
+            setMessage("Wrong.", 1000);
+            return;
+        }
+
+        if (state === states.MIRROR) {
+            const decoded = caesarDecode(finalCipher, 7);
+
+            if (value === decoded) {
+                state = states.COMPLETE;
+
+                stopObservation();
+
+                word.textContent = decoded;
+                setMessage("ACCESS GRANTED");
+
+                input.disabled = true;
+
+                document.title = decoded;
+
+                return;
+            }
+
+            setMessage("Wrong.", 1000);
+            return;
+        }
+    }
+
+    input.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            handleInput();
+        }
+    });
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+            input.value = "";
+        }
+    });
+
+    window.addEventListener("blur", () => {
+        input.blur();
+    });
+
+    window.addEventListener("focus", () => {
+        if (state !== states.COMPLETE) {
+            showWord();
+        }
+    });
+
+    showWord();
+    startObservation();
+
+    window.addEventListener("beforeunload", () => {
+        stopObservation();
+
+        if (revealTimer) {
+            clearTimeout(revealTimer);
+        }
+    });
+
+    /*
+        The first discovery is intentionally represented by the
+        changing letters rather than an explicit instruction.
+
+        Source inspection reveals the second layer.
+    */
+
+    const observation = {
+        sequence: [1, 2, 3, 4, 5, 6],
+        instruction: "SOURCE"
+    };
+
+    const mirror = {
+        fragments: sourceFragments,
+        order: sourceOrder
+    };
+
+    window.__puzzle = {
+        observation,
+        mirror
+    };
+})();
 </script>
 
 </body>
